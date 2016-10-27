@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>ForeCaddie - Know Your Game</title>
+	<link href="https://fonts.googleapis.com/css?family=Carter+One" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Bevan" rel="stylesheet">
+	<link rel="stylesheet" href="styles.css"/>
+	<link rel="stylesheet" href="login.css"/>
+	<link rel="stylesheet" href="signup.css"/>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" />
+	<script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery.leanmodal/1.1/jquery.leanmodal.min.js"></script>
+</head>
+<body>
+	<div class="container-fluid" id="everything">
+	<div class="row">
+		<header class="header">
+			<h2 class="name">ForeCaddie</h2>
+		</header>
+		<div id="first_container" class="container-fluid">
+			<h1 align="center" class="main">Golf, <br> informed.</h1>
+				<!--img id="dunbar" src="dunbar_001.jpg"/>
+				<img class="smallscreen" src="dunbar_iphone_screen.jpg"/>
+				<img class="middlescreen" src="dunbar_middle_screen.jpg"/>
+				<img class="largescreen" src="dunbar_imac_screen.jpg"/-->
+		</div>
+		<div id ="second_container">
+			<button class="front_button" id="login"  href="#modal">Login</button> 
+			<button class="front_button" id="register"  href="#modal">Join The Club</button> 
+			<a class="front_button" id="scroll" href="#about">Learn More</a>
+		</div>
+		<!--Begin Modal Popup Box-->
+		<div id="modal" class="popupContainer" style="display:none;">
+			<header class="popupHeader">
+				<span class="header_title">Login</span>
+				<span class="modal_close"><i class="fa fa-times"></i></span>
+			</header>
+ 		<section class="popupBody">
+ 		<!--Login Form-->
+ 			<div class="user_login">
+    		<form>
+        			<label>Email / Username</label> <input type="text" id="username"><br>
+       				 <label>Password</label> <input type="password" id="password"><br>
+      	   		<div class="action_btns">
+           			 <div class="one_half">
+               		 	<a class="btn register_btn" href="#">Need to sign up?</a>
+           		 	 </div> 
+            	 	 <div class="one_half last">
+                	 <a class="btn btn_green" id="loginbutton" href="#">Login</a>
+            	  	 </div>
+       			</div>
+   			</form>
+			</div>
+		<!--Register Form-->
+			<div class="user_register">
+    			<form>
+       				 <label>Username</label> <input id="registerusername" type="text"><br>
+       				 <label>Email Address</label> <input type="email"><br>
+        			<label>Password</label> <input id="registerpassword" type="password"><br>
+		       		<div class="action_btns">
+		            	<div class="one_half">
+		                	<a class="btn login_btn" href="#">Already a member?</a>
+		            	</div>
+		            	<div class="one_half last">
+		               		<a class="btn btn_green" href="#" id="registerbutton">Register</a>
+		            	</div>
+		        	</div>
+    			</form>
+			</div>
+    	</section>
+		</div>
+		<!--End PopUp Box-->
+		<div class="third_container">
+			<a id="about">
+				<h1 class="description">What is ForeCaddie?</h1>
+			</a>
+			<p class="title">ForeCaddie allows the average golfer to more accurately visualize their game.</p>
+			<p class="subtitle">By tracking detailed stats per hole, players can pinpoint opportunities for improvement and progress their play more efficiently. 
+			</p>
+		</div>
+			<div class="fourth_container">
+				<h1 class="features">ForeCaddie Tracks:</h1>
+				<div class= "container-fluid" id="icons">
+					<div id="track">
+						<img src="fairways_icon.jpg"/>
+						<img class="largescreen" src="big_fairways_icon.jpg"/>
+						<p class="stat">Fairways</p> <br>
+					</div>
+					<div id="track">
+						<img src="greens_icon.jpg"/>
+						<img class="largescreen" src="big_greens_icon.jpg"/>
+						<p class="stat">Greens in Regulation</p> <br>
+					</div>
+					<div id="track">
+						<img src="putts_icon.jpg">
+						<img class="largescreen" src="big_putts_icon.jpg"/>
+						<p class="stat">Putts</p> <br>
+					</div>
+					<div id="track">
+						<img src="score_icon.jpg"/>
+						<img class="largescreen" src="big_score_icon.jpg"/>
+						<p class="stat">Score</p> <br>
+					</div>
+				</div>
+			</div>
+			<div id="bottom">
+				<p class="title">If you're ready to learn more about your game,   join the club and start golfing informed.</p>
+			</div>
+		<footer class="footer">
+			<p>ForeRight! Productions</p>
+		</footer>	
+	</div>
+	</div>
+	<script>
+
+	//PopUp Box Call
+	$("#register").leanModal({top : 200, overlay : 0.6, closeButton: ".modal_close" });
+	$("#login").leanModal({top : 200, overlay : 0.6, closeButton: ".modal_close" });
+	
+
+	//PopUp Box Functionality
+	$("#register", "#login").leanModal({
+        top: 100,
+        overlay: 0.6,
+        closeButton: ".modal_close"
+	});
+
+	$(function() {
+
+			 // Calling Register Form
+	        $("#register_form").click(function() {
+	             $(".user_register").show();
+	             $(".header_title").text('Register');
+	             return false;
+	        });
+
+	        // Calling Login Form
+	     $("#login_form").click(function() {
+	            $(".user_login").show();
+	            return false;
+	        });
+
+	         // Toggling between forms
+		    $(".register_btn").click(function () {
+		        $(".user_login").hide();
+		        $(".user_register").show();
+		        $(".header_title").text('Sign up');
+		        return false;
+		    });
+
+		    $(".login_btn").click(function () {
+		    	$(".user_register").hide();
+		    	$(".user_login").show();
+		    	$(".header_title").text("Login");
+		    	return false;
+		    });
+	});
+
+	//Login and Register Functions
+	function tryToLogin() {
+		console.log('Logging In');
+			$.post('/api/login',
+			{
+				username: $('#username').val(),
+				password: $('#password').val()
+
+			}, function(data) {
+					if (data === "success"){
+						document.location = "./home.html";
+					} else {
+						$('#error').html("We couldn't find your username or password. Give it another shot.");
+					}
+				});
+	}
+
+	function tryToRegister() {
+		console.log('Registering');
+			$.post('/api/register',
+			{
+				username: $('#registerusername').val(),
+				password: $('#registerpassword').val()
+
+			}, function(data) {
+				if (data === "success"){
+					document.location = "./home.html";
+				} else {
+					$('#error').html("Choose a username and a password.");
+				}
+			});
+		}
+
+	//Anchor scroll animation 
+	$(document).on('click', 'a', function(event){
+    	event.preventDefault();
+    	if($.attr(this, 'href') === '#') {
+    		return;
+    	}
+
+    	$('html, body').animate({
+        scrollTop: $( $.attr(this, 'href') ).offset().top
+    	}, 500);
+	});
+
+	//Login Function Calls
+	$(document).ready(function() {
+		$('#loginbutton').click(tryToLogin);
+		$('#registerbutton').click(tryToRegister);
+	});
+	
+
+	</script>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>ForeCaddie - Clubhouse</title>
+	<link href="https://fonts.googleapis.com/css?family=Carter+One" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Bevan" rel="stylesheet">
+	<link rel="stylesheet" href="styles.css"/>
+	<link rel="stylesheet" href="dropdown.css"/>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+	<script src="quotes.js"></script>
+</head>
+<body>
+	<div class="container-fluid">
+	<div class="row">
+	<header class="header">
+		<h2 class="name">ForeCaddie</h2>
+		<button align="right" id="logoutButton">Logout</button>
+	</header>
+	<div id="top_container">
+			<div id="quoteContainer">
+				<p></p>
+				<p id="quoteGenius"></p>			
+			</div>
+		<div id="buttonContainer">
+				<a href="#" id="quoteButton">Get another quote</a>
+		</div>
+	</div>
+	<div class="middle_container">
+			<h1 id="subwelcome">Your Stats</h1>
+				<h4 id="per">Per Round</h4>
+				<div id="stats">
+					<div class="avg">
+						<p>Score</p>
+						<p class="number" id="userscore"></p>
+					</div>
+					<div class="avg">
+						<p>Fairways</p>
+						<p class="number" id="userfir"></p>
+					</div>
+					<div class="avg">
+						<p>Greens</p>
+						<p class="number" id="usergir"></p>
+					</div>
+					<div class="avg">
+						<p>Putts</p> 
+						<p class="number" id="userputts"></p>
+					</div>
+				</div>	
+				<button id="updateButton">Update Stats</button>
+	</div>
+	<div id="course_choice">
+		<h2 id="subwelcome">Track a Round</h2>
+			<ul class="dropdown">
+        		<li><a href="#">Choose Your Course</a>
+	        		<ul class="sub_menu">
+		        		<li>
+		        			<a href="#">Colorado</a>
+		        			<ul>
+		        				<li><a id="flatirons" href="#">Flatirons GC</a></li>
+		        			</ul>
+						</li>
+					</ul>
+				</li>
+			</ul>
+	</div>
+	<footer class="footer">
+		<p>ForeRight! Productions</p>
+	</footer>
+	</div>
+	</div>
+	<script>
+
+	//Course Selection Dropdown Menu
+	$(function dropDown() {
+	    $("ul.dropdown li").hover(function(){    
+	        $(this).addClass("hover");
+	        $('ul:first',this).css('visibility', 'visible');    
+	    }, function(){
+	        $(this).removeClass("hover");
+	        $('ul:first',this).css('visibility', 'hidden');	    
+	    });
+	    	$("ul.dropdown li ul li:has(ul)").find("a:first").append(" &raquo; ");
+	});
+
+	//Move to card when course is selected
+	function goToCard() {
+		$.post('/api/createGame', { course : "Flatirons" }, function(gameId){
+			window.location.href= "scorecard/" + gameId;
+		});
+	}
+
+	//Update user stats with averages 
+	function updateUserStats(){
+		$.get('/stats', function(data){
+			
+			data = JSON.parse(data);
+			console.log(data);
+
+			//Empty arrays to push user stats in to
+			var scoreStat = [];
+			var fairwayStat = [];
+			var greenStat = [];
+			var puttStat = [];
+
+			//Variables to count 
+			var scoreCount = 0;
+			var fairwayCount = 0;
+			var greenCount = 0;
+			var puttCount = 0;
+
+			//Loop through parsed data and push stats into appropriate arrays
+			for(var d = 0; d <data.length; d++){	
+				for(var key in data[d]){
+					if(data[d].hasOwnProperty(key)){
+						var val = data[d][key];
+						console.log(key, val);
+						if( key === "userOutNine" || key === "userInNine"){
+							scoreStat.push(val);
+						} else if( key === "userOutFairways" || key === "userInFairways") {
+							fairwayStat.push(val);
+						} else if (key === "userOutGreens" || key === "userInGreens") {
+							greenStat.push(val);
+						} else if ( key === "userOutPutts" || key === "userInPutts") {
+							puttStat.push(val);
+						}
+					} 
+				}
+			}
+
+	//Calculate array totals, display to page
+	//SCORE
+			//Average Score per 18
+			for(var i = 0; i <scoreStat.length; i++) {
+				var parsedScore = JSON.parse(scoreStat[i]);
+				for(var j = 0; j < parsedScore.length; j++){
+					scoreCount = scoreCount + parseInt(parsedScore[j]);
+				}
+			}
+
+			//Display score average to page
+			function scoreAvg(){
+				var average = scoreCount / data.length; 
+				average = Math.floor(average);
+				return average;
+			}
+
+			$('#userscore').html(scoreAvg());
+
+	//FAIRWAYS
+			//Get number of "C"s, fairways hit
+			for(var f = 0; f <fairwayStat.length; f++){
+				for(var g = 0; g<fairwayStat[f].length; g++){
+					if(fairwayStat[f][g] === "C") {
+					fairwayCount = fairwayCount + 1;
+					}
+				}
+			} 
+
+			//Display fairway average to page
+			function fairwayAvg(){
+				console.log(fairwayCount);
+				var average = fairwayCount / (data.length * 14) * 100;  
+				average = Math.round(average);
+				return average;
+			}
+
+			$('#userfir').html(fairwayAvg() + "%");
+
+	//GREENS
+			//Greens hit, get number of trues
+			for(var k = 0; k < greenStat.length; k++){
+				var parsedGreen = JSON.parse(greenStat[k]);
+				for(var l = 0; l < parsedGreen.length; l++){
+					if(parsedGreen[l] === "true") {
+					greenCount = greenCount + 1;
+					}
+				}
+			} 
+
+			//Display green average to page
+			function greenAvg(){
+				var average = greenCount / (data.length * 18) * 100; 
+				average = Math.floor(average);
+				return average;
+			}
+
+			$('#usergir').html(greenAvg() + "%");
+
+	//PUTTS
+			//Average Putts per 18 
+			for(var m = 0; m < puttStat.length; m++) {
+				var parsedPutt = JSON.parse(puttStat[m]);
+				for(var n = 0; n < parsedPutt.length; n++){
+					puttCount = puttCount + parseInt(parsedPutt[n]);
+				}
+			}
+
+			//Display putt average to page
+			function puttAvg(){
+				var average = puttCount / data.length;  
+				average = Math.floor(average);
+				return average;
+			}
+
+			$('#userputts').html(puttAvg());
+
+		});
+	}
+
+	//Logout Functionality
+	function logOut() {
+		$.post('/api/logout',
+			function (data){
+			window.location.href = "index.html";
+			}
+		);
+	}
+
+	$(document).ready(function() {
+		$('#logoutButton').click(logOut);
+		$('#flatirons').click(goToCard);
+		$('#updateButton').click(updateUserStats);
+	});
+
+
+	</script>
+</body>
+</html>
